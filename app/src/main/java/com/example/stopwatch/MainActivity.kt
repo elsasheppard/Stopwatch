@@ -17,14 +17,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        Log.d(TAG, "onStart has been called")
+
     }
 
     override fun onRestart() {
         super.onRestart()
+        Log.d(TAG, "onRestart has been called")
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "onResume has been called")
     }
 
     override fun onPause() {
@@ -34,9 +38,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        Log.d(TAG, "onStop has been called")
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d(TAG, "onDestroy has been called")
     }
 }
