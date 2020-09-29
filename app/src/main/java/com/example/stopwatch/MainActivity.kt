@@ -2,7 +2,9 @@ package com.example.stopwatch
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,6 +13,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        button_main_start.setOnClickListener {
+            val uncheckTimer = object: CountDownTimer(10000, 250) {
+
+                override fun onFinish() {
+                    finish()
+                }
+
+                override fun onTick(millisRemaining: Long) {
+                    button_main_start.setText(millisRemaining.toInt())
+                }
+            }
+            uncheckTimer.start()
+        }
     }
 
     // TODO: override all necessary lifecycle methods in order
@@ -45,4 +61,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Log.d(TAG, "onDestroy has been called")
     }
+
+
 }
