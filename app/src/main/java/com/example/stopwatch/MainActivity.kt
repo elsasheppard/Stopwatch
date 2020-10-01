@@ -3,7 +3,9 @@ package com.example.stopwatch
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.SystemClock
 import android.util.Log
+import android.widget.Chronometer
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -13,20 +15,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        button_main_start.setOnClickListener {
-            val uncheckTimer = object: CountDownTimer(10000, 250) {
-
-                override fun onFinish() {
-                    finish()
-                }
-
-                override fun onTick(millisRemaining: Long) {
-                    button_main_start.setText(millisRemaining.toInt())
-                }
-            }
-            uncheckTimer.start()
-        }
     }
 
     // TODO: override all necessary lifecycle methods in order
@@ -35,6 +23,9 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         Log.d(TAG, "onStart has been called")
 
+        chronometer_main_timer.start()
+        chronometer_main_timer.base = SystemClock.elapsedRealtime()
+        button_main_start.setText(SystemClock.elapsedRealtime().toString())
     }
 
     override fun onRestart() {
@@ -55,6 +46,8 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop has been called")
+
+        chronometer_main_timer.stop()
     }
 
     override fun onDestroy() {
