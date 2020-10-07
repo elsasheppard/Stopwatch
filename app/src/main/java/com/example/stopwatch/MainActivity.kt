@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.util.Log
+import android.view.View
 import android.widget.Chronometer
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        button_main_start.isEnabled = false
 
         // ?. builds an if not null
         // if(savedInstanceState != null)
@@ -26,8 +28,27 @@ class MainActivity : AppCompatActivity() {
         // what comes after is the default value if what comes before is null
         timeElapsed = savedInstanceState?.getLong(KEY_TIME_ELAPSED) ?: 0L
 
-        chronometer_main_timer.base = SystemClock.elapsedRealtime() - timeElapsed
-        chronometer_main_timer.start()
+        button_main_start.setOnClickListener {
+            chronometer_main_timer.base = SystemClock.elapsedRealtime() - timeElapsed   // reference point base is exact time button was clicked MINUS timeElapsed (at beginning is 0)
+            chronometer_main_timer.visibility = View.VISIBLE
+            chronometer_main_timer.start()
+
+            button_main_start.isEnabled = false                                         // no click again
+            button_main_pause.isEnabled = true
+        }
+
+        button_main_pause.setOnClickListener {
+            timeElapsed = SystemClock.elapsedRealtime() - chronometer_main_timer.getBase()
+            chronometer_main_timer.stop()
+
+            button_main_start.isEnabled = true
+            button_main_pause.isEnabled = false                                         // no click again
+        }
+
+        button_main_reset.setOnClickListener {
+            chronometer_main_timer.base = SystemClock.elapsedRealtime()                 // reference point base is exact time button was clicked
+            timeElapsed = 0                                                             // reset timer to 0
+        }
     }
 
     override fun onStart() {
@@ -76,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
         // TODO: 0. get the timer to start and stop
         // TODO: 1. calculate the timeElapsed before saving the value
-        // ????? timeElapsed = SystemClock.elapsedRealtime()
+        timeElapsed = chronometer_main_timer.getBase() - SystemClock.elapsedRealtime()
 
         // TODO: 2. get the rotation to work properly regardless of whether the timer is stopped
         outState.putLong(KEY_TIME_ELAPSED, timeElapsed)
